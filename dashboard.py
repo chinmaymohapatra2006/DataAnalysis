@@ -2,15 +2,12 @@
 # ADVANCED DATA ANALYTICS DASHBOARD
 # Run:  streamlit run dashboard_enhanced.py
 # ============================================================
-
 import sys
-
-from dash1 import cat_cols
 try:
     import streamlit as st
     _ = st.session_state
 except Exception:
-    raise SystemExit("\n❌  Run with:  streamlit run dashboard_enhanced.py\n")
+    raise SystemExit("\n❌  Run with:  streamlit run dashboard.py\n")
 
 import pandas as pd
 import numpy as np
