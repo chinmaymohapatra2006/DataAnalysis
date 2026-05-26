@@ -1,4 +1,4 @@
-# ============================================================
+ # ============================================================
 # ADVANCED DATA ANALYTICS DASHBOARD
 # Run:  streamlit run dashboard_enhanced.py
 # ============================================================
@@ -640,7 +640,7 @@ with tab_ov:
             "Unique":     [df[c].nunique() for c in df.columns],
             "Sample":     [str(df[c].dropna().iloc[0]) if df[c].notna().any() else "—" for c in df.columns],
         })
-        st.dataframe(col_info, use_container_width=True, height=300)
+        st.dataframe(col_info,width="stretch", height=300)
 
     with r1b:
         section_label("Data Type Distribution", C_ORANGE)
@@ -656,7 +656,7 @@ with tab_ov:
             dtype_df, names="Type", values="Count", hole=0.52,
             color_discrete_sequence=[C_GREEN, C_ORANGE, C_BLUE, C_MUTED]
         )
-        st.plotly_chart(style_fig(fig_dtype, 300), use_container_width=True)
+        st.plotly_chart(style_fig(fig_dtype, 300),width="stretch")
 
     r2a, r2b = st.columns(2)
     with r2a:
@@ -665,7 +665,7 @@ with tab_ov:
             desc = df[nc].describe().T.round(3)
             desc.insert(0, "Column", desc.index)
             desc = desc.reset_index(drop=True)
-            st.dataframe(desc, use_container_width=True, height=260)
+            st.dataframe(desc, width="stretch", height=260)
         else:
             st.info("No numeric columns found.")
 
@@ -684,7 +684,7 @@ with tab_ov:
                 text="Missing %"
             )
             fig_miss.update_traces(texttemplate="%{text:.1f}%", textposition="outside")
-            st.plotly_chart(style_fig(fig_miss, 260), use_container_width=True)
+            st.plotly_chart(style_fig(fig_miss, 260), width="stretch")
         else:
             st.success("✅ No missing values found in the dataset!")
 
@@ -802,7 +802,7 @@ with tab_ex:
 
     if fig:
         panel_header(f"{ex_col}  ·  {ex_chart}")
-        st.plotly_chart(style_fig(fig, 460), use_container_width=True)
+        st.plotly_chart(style_fig(fig, 460), width="stretch")
 
         if show_topbot and is_num:
             n_val = tb_n if "Custom" in tb_n_opt else int(tb_n_opt.split()[1])
@@ -811,12 +811,12 @@ with tab_ex:
                 section_label(f"Top {n_val} Values", C_GREEN)
                 top_df = df.nlargest(n_val, ex_col)[[ex_col]].reset_index(drop=True)
                 top_df.index += 1
-                st.dataframe(top_df, use_container_width=True, height=200)
+                st.dataframe(top_df, width="stretch", height=200)
             with t_b:
                 section_label(f"Lowest {n_val} Values", C_RED)
                 bot_df = df.nsmallest(n_val, ex_col)[[ex_col]].reset_index(drop=True)
                 bot_df.index += 1
-                st.dataframe(bot_df, use_container_width=True, height=200)
+                st.dataframe(bot_df, width="stretch", height=200)
 
     if is_num:
         section_label("Statistical Summary", C_CYAN)
@@ -947,7 +947,7 @@ with tab_cmp:
     if fig:
         lbl = f"{x_col} vs {y_arg}" + (f" vs {z_arg}" if z_arg else "") + f" · {cmp_chart} · {cmp_agg}"
         panel_header(lbl)
-        st.plotly_chart(style_fig(fig, 500), use_container_width=True)
+        st.plotly_chart(style_fig(fig, 500), width="stretch")
         if show_tb2 and y_arg and y_arg in nc:
             n_val = tb2_n
             t_a, t_b = st.columns(2)
@@ -955,12 +955,12 @@ with tab_cmp:
                 section_label(f"Top {n_val} — {y_arg}", C_GREEN)
                 top_tbl = df.nlargest(n_val, y_arg)[[x_col, y_arg]].reset_index(drop=True)
                 top_tbl.index += 1
-                st.dataframe(top_tbl, use_container_width=True, height=200)
+                st.dataframe(top_tbl, width="stretch", height=200)
             with t_b:
                 section_label(f"Lowest {n_val} — {y_arg}", C_RED)
                 bot_tbl = df.nsmallest(n_val, y_arg)[[x_col, y_arg]].reset_index(drop=True)
                 bot_tbl.index += 1
-                st.dataframe(bot_tbl, use_container_width=True, height=200)
+                st.dataframe(bot_tbl, width="stretch", height=200)
     elif not y_selected:
         st.info("👆 Select a **Y Axis** column to begin comparison.")
 
@@ -1009,7 +1009,7 @@ with tab_corr:
                         color_continuous_scale=palette if isinstance(palette, str) else "RdBu",
                         text_auto=".3f",
                     )
-                    st.plotly_chart(style_fig(fig_corr, 480), use_container_width=True)
+                    st.plotly_chart(style_fig(fig_corr, 480), width="stretch")
 
                 with cr2:
                     section_label("Strongest Pairs", C_ORANGE)
@@ -1022,7 +1022,7 @@ with tab_corr:
                     pairs.columns = ["Col A", "Col B", "|r|"]
                     pairs = pairs[pairs["|r|"] < 1].head(12)
                     pairs["|r|"] = pairs["|r|"].round(3)
-                    st.dataframe(pairs, use_container_width=True, height=380)
+                    st.dataframe(pairs, width="stretch", height=380)
 
                     section_label("Interpretation", C_CYAN)
                     for _, row in pairs.head(5).iterrows():
@@ -1422,7 +1422,7 @@ with tab_trend:
                 + (f"  |  {trend_dir}" if split_by == "None" else "")
                 + ("  |  📅 Synthetic Index" if using_synthetic else "")
             )
-            st.plotly_chart(style_fig(fig_trend, 440), use_container_width=True)
+            st.plotly_chart(style_fig(fig_trend, 440), width="stretch")
 
         except Exception as e:
             st.error(f"Trend error: {e}")
@@ -1437,12 +1437,12 @@ with tab_trend:
             section_label(f"Top {tb3_n} Periods", C_GREEN)
             top_t = agg_df.nlargest(tb3_n, metric_col)[[date_col_t, metric_col]].reset_index(drop=True)
             top_t.index += 1; top_t.columns = ["Date", metric_col]
-            st.dataframe(top_t, use_container_width=True, height=200)
+            st.dataframe(top_t,width="stretch", height=200)
         with t_b:
             section_label(f"Lowest {tb3_n} Periods", C_RED)
             bot_t = agg_df.nsmallest(tb3_n, metric_col)[[date_col_t, metric_col]].reset_index(drop=True)
             bot_t.index += 1; bot_t.columns = ["Date", metric_col]
-            st.dataframe(bot_t, use_container_width=True, height=200)
+            st.dataframe(bot_t, width="stretch", height=200)
 
     # ════════════════════════════════════════════════════════
     # DISPLAY SECTION 3 — PERIOD COMPARISON CHART
@@ -1480,7 +1480,7 @@ with tab_trend:
                 fig_yoy = px.bar(grp, x="Period", y=metric_col, color_discrete_sequence=[C_PURPLE])
 
             panel_header(period_cmp)
-            st.plotly_chart(style_fig(fig_yoy, 300), use_container_width=True)
+            st.plotly_chart(style_fig(fig_yoy, 300), width="stretch")
         except Exception as e:
             st.warning(f"Period comparison error: {e}")
 
@@ -1631,11 +1631,11 @@ with tab_trend:
                             st.warning(f"{pred_model} failed: {model_err}")
 
                     panel_header(f"Forecast — {', '.join(selected_models)} — Next {horizon_days} Days")
-                    st.plotly_chart(style_fig(fig_pred, 460), use_container_width=True)
+                    st.plotly_chart(style_fig(fig_pred, 460),width="stretch")
 
                     if metrics_rows:
                         section_label("Model Performance Metrics", C_CYAN)
-                        st.dataframe(pd.DataFrame(metrics_rows), use_container_width=True, hide_index=True)
+                        st.dataframe(pd.DataFrame(metrics_rows), width="stretch", hide_index=True)
 
             except Exception as e:
                 st.error(f"Forecast error: {e}")
@@ -1727,7 +1727,7 @@ with tab_raw:
     # ── Editable data table ──
     edited = st.data_editor(
         paged_df,
-        use_container_width=True,
+        width="stretch",
         height=420,
         num_rows="dynamic",
         key="raw_editor",
@@ -1827,7 +1827,7 @@ with tab_raw:
         st.download_button(
             "📥 Download CSV", data=csv_out,
             file_name="data_export.csv", mime="text/csv",
-            use_container_width=True
+            width="stretch"
         )
 
     with exp_c2:
@@ -1839,7 +1839,7 @@ with tab_raw:
                 "📥 Download Excel", data=buf.getvalue(),
                 file_name="data_export.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                use_container_width=True
+                width="stretch"
             )
         except Exception:
             st.caption("Excel export unavailable (openpyxl not installed)")
@@ -1849,7 +1849,7 @@ with tab_raw:
         st.download_button(
             "📥 Download JSON", data=json_out,
             file_name="data_export.json", mime="application/json",
-            use_container_width=True
+            width="stretch"
         )
 
     # ── Column Summary ──
@@ -1871,7 +1871,7 @@ with tab_raw:
         stats_df = display_df[vis_nc].describe().T.round(3)
         stats_df.insert(0, "Column", stats_df.index)
         stats_df = stats_df.reset_index(drop=True)
-        st.dataframe(stats_df, use_container_width=True, height=200)
+        st.dataframe(stats_df, width="stretch", height=200)
 
 # ============================================================
 # CHATBOT — Sidebar panel
